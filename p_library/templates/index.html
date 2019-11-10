@@ -1,0 +1,62 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<div class="container">
+	Добро пожаловать в {{ title }}.  <br>
+	Тут собрано {{ books|length }} книг из моей личной коллекции.
+
+	<table border="3">
+		<tr>
+			<th>№</th>
+			<th>Название</th>
+			<th>ISBN</th>
+			<th>Описание</th>
+			<th>Год издания</th>
+			<th>Автор</th>
+			<th>Страна</th>
+			<th>Количество книг</th>
+			<th>Добавить/убавить</th>
+		</tr>
+		{% for book in books %}
+		<tr>
+			<td>{{ forloop.counter }}</td>
+			<td>{{ book.title }}</td>
+			<td>{{ book.ISBN }}</td>
+			<td>{{ book.description }}</td>
+			<td>{{ book.year_release }}</td>
+			<td>{{ book.author.full_name }}</td>
+			<td>{{ book.author.country }}</td>
+			<td>{{ book.copy_count }}</td>
+			<td>
+				<form action="/index/book_increment/" method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+					<input type="hidden" name="id" value="{{book.id}}" />
+					<input type="submit" value="Увеличить количество" />
+				</form>
+				<form action="/index/book_decrement/" method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+					<input type="hidden" name="id" value="{{book.id}}" />
+					<input type="submit" value="Уменьшить количество" />
+				</form>
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
+
+	<button class="btn btn-success" onclick= "window.location.href = 'redactions'"> К списку книг
+		<!-- <a href="../../index">К списку книг</a> -->
+	</button>
+</div>
+<style>
+	.btn{
+		margin-left: 30px;
+		width: 90%;
+		margin-top: 30px;
+		margin-bottom: 30px;
+	}
+	th{
+		background: yellow;
+	}
+	.container{
+		background: rgb(16, 189, 233);
+		width: 90%;
+	}
+</style>
